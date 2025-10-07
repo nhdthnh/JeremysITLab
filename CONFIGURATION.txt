@@ -130,3 +130,22 @@ int f0/2
  switchport trunk native vlan 99
  switchport trunk allowed vlan 40,99
 do write
+
+
+*** Part 3, Step 1
+int range g0/0/0, g0/1/0
+ip add dhcp
+no shut
+int g0/0
+ip add 10.0.0.33 255.255.255.252
+no shut
+int g0/1
+ip add 10.0.0.37 255.255.255.252
+no shut
+int lo0
+ip add 10.0.0.76 255.255.255.255
+no shut
+do wr
+*** Part 3, Step 2
+ip routing
+do write
