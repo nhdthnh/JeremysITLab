@@ -20,3 +20,113 @@ line console 0
  exec-timeout 30 
  logging synchronous
 do wr
+
+
+
+***Part 2, Step 1,2
+int range g1/0/3-4
+channel-group 1 mode desirable (pagp)
+channel-group 1 mode active (lacp)
+
+*** Part 2, Step 3
+# DSW-A1, DSW-A2
+interface range g1/0/1-3
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,40,99
+interface po1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,40,99
+
+# ASW-A1, ASW-A2, ASW-A3
+interface range g0/1-2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,40,99
+
+# DSW-B1, DSW-B2
+interface range g1/0/1-3
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,30,99
+interface po1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,30,99
+
+# ASW-B1, ASW-B2, ASW-B3
+interface range g0/1-2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,30,99
+
+
+*** Part 2, Step 4
+# ASW-A1, ASW-B1
+vtp domain JeremysITLab
+vtp version 2
+
+#ASW-A2, ASW-A3, ASW-B2, ASW-B3
+vtp domain JeremysITLab
+vtp mode client
+
+
+*** Parrt 2, Step 5,6
+# DSW-A1
+vlan 10
+name PCs
+vlan 20
+name Phones
+vlan 40
+name Wi-Fi
+vlan 99
+name Management
+
+# DSW-B1
+vlan 10
+name PCs
+vlan 20
+name Phones
+vlan 40
+name Wi-Fi
+vlan 99
+name Management
+
+
+*** Part 2, Step 7
+# ASW-A2, ASW-A3 & ASW-B2
+int f0/1
+ switchport mode access
+sw nonegotiate
+ switchport access vlan 10
+ switchport voice vlan 20 
+
+# ASW-B3
+conf t
+int f0/1
+ switchport mode access
+sw nonegotiate
+ switchport access vlan 30
+
+# ASW-A1
+int f0/1
+sw mode access 
+sw nonegotiate
+sw ac vlan 99
+
+
+*** Part 2, Step 8
+# ASW-A1
+int f0/2
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 40,99
+do write
